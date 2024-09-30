@@ -25,12 +25,15 @@
   register: current_governor
   when: sysfs_file.stat.exists
 
+- name: discover services
+  service_facts:
+
 - name: disable ondemand service
   service:
     name: ondemand
     state: stopped
     enabled: no
-  when: ansible_distribution_version != "22.04"
+  when: "'ondemand' in ansible_facts.services"
 
 - name: bounce service if necessary
   service:
